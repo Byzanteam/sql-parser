@@ -26,3 +26,6 @@ sql_parser-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# LSP
+.elixir_ls
