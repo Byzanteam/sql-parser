@@ -1,0 +1,78 @@
+name: Build NIF
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "native/**"
+      - ".github/workflows/release.yml"
+    tags:
+      - "*"
+
+jobs:
+  build-release:
+    name: NIF
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        nif:
+          - 2.15
+        job:
+          - { target: aarch64-apple-darwin, os: macos-11 }
+          - { target: aarch64-unknown-linux-gnu, os: ubuntu-20.04, use-cross: true }
+          - { target: aarch64-unknown-linux-musl, os: ubuntu-20.04, rustflags: "-C target-feature=-crt-static", use-cross: true }
+          - { target: x86_64-apple-darwin, os: macos-11 }
+          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04, rustflags: "-C target-feature=+fxsr,+sse,+sse2,+sse3,+ssse3,+sse4.1,+sse4.2,+popcnt,+avx,+fma" }
+          - { target: x86_64-unknown-linux-musl, os: ubuntu-20.04, rustflags: "-C target-feature=-crt-static", use-cross: true }
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Extract Version
+        run: |
+          echo "VERSION=$(awk -F '"' '/version/ {print $2}' mix.exs)" >> $GITHUB_ENV
+
+      - name: Rustc Flags
+        if: ${{ matrix.job.rustflags }}
+        run: |
+          echo "RUSTFLAGS=${{ matrix.job.rustflags }}" >> $GITHUB_ENV
+
+      - name: Add target
+        run: |
+          rustup target add ${{ matrix.job.target }}
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: sql-parser
+          shared-key: ${{ matrix.job.target }}-${{ matrix.nif }}
+          workspaces: |
+            native/sql_parser
+
+      - name: Build NIFs
+        id: build-crate
+        uses: philss/rustler-precompiled-action@v1.1.0
+        with:
+          project-name: sql_parser
+          project-version: ${{ env.VERSION }}
+          target: ${{ matrix.job.target }}
+          nif-version: ${{ matrix.nif }}
+          use-cross: ${{ matrix.job.use-cross }}
+          cross-version: ${{ matrix.job.cross-version || 'v0.2.4' }}
+          project-dir: native/sql_parser
+          cargo-args: ${{ matrix.job.cargo-args }}
+          variant: ${{ matrix.job.variant }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.build-crate.outputs.file-name }}
+          path: ${{ steps.build-crate.outputs.file-path }}
+
+      - name: Publish Archives
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ steps.build-crate.outputs.file-path }}
