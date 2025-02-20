@@ -1,8 +1,8 @@
 %{
-  "libsql_parser-v0.1.0-nif-2.15-aarch64-apple-darwin.so.tar.gz" => "sha256:bbe5b68e641545fbc34965c40bfabcea4d8136b87f726e600c90be019c15fc66",
-  "libsql_parser-v0.1.0-nif-2.15-aarch64-unknown-linux-gnu.so.tar.gz" => "sha256:b93464adf8ffb19c20ff272d2b9aaaf520e867d814da74e2aa60cd80aebfe7f8",
-  "libsql_parser-v0.1.0-nif-2.15-aarch64-unknown-linux-musl.so.tar.gz" => "sha256:6f46b27aad56fb1438639cbbf80646dbb448c4d6bb828dbbf5d0f31dc329a2f1",
-  "libsql_parser-v0.1.0-nif-2.15-x86_64-apple-darwin.so.tar.gz" => "sha256:c5949cebcc19b33f288dc47ce4737e355f0a895b70dde42dc677db278b2f2949",
-  "libsql_parser-v0.1.0-nif-2.15-x86_64-unknown-linux-gnu.so.tar.gz" => "sha256:ddeae25516d733cf1684ee4c89414c3c229a372f091c9d8a24477f5231fd8029",
-  "libsql_parser-v0.1.0-nif-2.15-x86_64-unknown-linux-musl.so.tar.gz" => "sha256:3d8cef4da21f72741fb1bae6cb97abe18a4da21e24ab67d1c55a2c7ea99a5888",
+  "libsql_parser-v0.2.0-nif-2.15-aarch64-apple-darwin.so.tar.gz" => "sha256:78cc4057654374c336d25fadf3d689e5078b4cce49be14148769568818d74df6",
+  "libsql_parser-v0.2.0-nif-2.15-aarch64-unknown-linux-gnu.so.tar.gz" => "sha256:9e32d86b87556e0fb8ece7e0a92612c8aee2a823f79b4e4655ad7bef913b533d",
+  "libsql_parser-v0.2.0-nif-2.15-aarch64-unknown-linux-musl.so.tar.gz" => "sha256:5bfd06c881e3934b1243ae7002af8561cfb3dbc9195cd823af4bd47fb0e190c6",
+  "libsql_parser-v0.2.0-nif-2.15-x86_64-apple-darwin.so.tar.gz" => "sha256:a5dacaaa1189dde388777f2c5155f2f3dfcbbf7bb3d0d83da77b11f0ddf7fc9e",
+  "libsql_parser-v0.2.0-nif-2.15-x86_64-unknown-linux-gnu.so.tar.gz" => "sha256:588a414e9d22a8c76e197237e3a458974c5d9cc531ac24068e4be43274acb09d",
+  "libsql_parser-v0.2.0-nif-2.15-x86_64-unknown-linux-musl.so.tar.gz" => "sha256:ad5d0519ddad19d4909c69ca88ddabf47fc63494d3c4706feccdd3bb0ec4266e",
 }
