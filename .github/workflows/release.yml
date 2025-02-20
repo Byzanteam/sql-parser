@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - fix/fahchen/release-action
     paths:
       - "native/**"
       - ".github/workflows/release.yml"
