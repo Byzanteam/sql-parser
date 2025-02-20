@@ -1,8 +1,5 @@
-use rustler::Atom;
-use rustler::NifResult;
-use rustler::NifTuple;
-use sqlparser::dialect::BigQueryDialect;
-use sqlparser::dialect::PostgreSqlDialect;
+use rustler::{types::tuple, Atom, Encoder, Env, Error, NifResult, NifTuple, Term};
+use sqlparser::dialect::{BigQueryDialect, PostgreSqlDialect};
 use sqlparser::parser::Parser;
 use sqlparser::parser::ParserError::ParserError;
 
@@ -49,10 +46,34 @@ fn to_sql(json: &str) -> NifResult<Response> {
         parts.push(format!("{}", node))
     }
 
-    return Ok(Response {
+    Ok(Response {
         status: atoms::ok(),
         message: parts.join("\n"),
-    });
+    })
 }
 
-rustler::init!("Elixir.SQLParser.Native", [parse, to_sql]);
+#[rustler::nif]
+fn split_with_parser<'a>(env: Env<'a>, sql: &'a str) -> NifResult<Term<'a>> {
+    match pg_query::split_with_parser(sql) {
+        Ok(statements) => {
+            let mut result = Vec::new();
+            for item in statements {
+                result.push(item.encode(env));
+            }
+
+            Ok(tuple::make_tuple(
+                env,
+                &[atoms::ok().encode(env), result.encode(env)],
+            ))
+        }
+        Err(err) => {
+            let error_message = err.to_string();
+            Err(Error::Term(Box::new(error_message)))
+        }
+    }
+}
+
+rustler::init!(
+    "Elixir.SQLParser.Native",
+    [parse, to_sql, split_with_parser]
+);
