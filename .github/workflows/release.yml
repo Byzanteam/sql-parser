@@ -27,7 +27,6 @@ jobs:
               target: aarch64-unknown-linux-musl,
               os: ubuntu-24.04-arm,
               rustflags: "-C target-feature=-crt-static",
-              use-cross: true,
             }
           - { target: x86_64-apple-darwin, os: macos-13 }
           - {
