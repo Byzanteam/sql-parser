@@ -17,4 +17,7 @@ defmodule SQLParser.Native do
   def parse(_sql, _dialect), do: :erlang.nif_error(:nif_not_loaded)
 
   def to_sql(_ast), do: :erlang.nif_error(:nif_not_loaded)
+
+  @spec split_with_parser(binary()) :: {:ok, [binary()]} | {:error, binary()}
+  def split_with_parser(_sql), do: :erlang.nif_error(:nif_not_loaded)
 end
